@@ -1,0 +1,379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="EaiDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CdsServiceConfig">
+          <Key>
+            <PropertyRef Name="CdsServiceConfigId" />
+          </Key>
+          <Property Name="CdsServiceConfigId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Hook" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Id" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreateUser" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateUser" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CdsServicePrefetch">
+          <Key>
+            <PropertyRef Name="CdsServicePrefetchId" />
+          </Key>
+          <Property Name="CdsServicePrefetchId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CdsServiceConfigId" Type="int" Nullable="false" />
+          <Property Name="resourceName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="resourceString" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="sequence" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreateUser" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateUser" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Insight">
+          <Key>
+            <PropertyRef Name="InsightId" />
+          </Key>
+          <Property Name="InsightId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberMessageHeadline" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="MemberMessage" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="ProviderMessageheadline" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProviderMessage" Type="nvarchar" MaxLength="500" />
+          <Property Name="MessageType" Type="nvarchar" MaxLength="100" />
+          <Property Name="Sensitiveind" Type="int" Nullable="false" />
+          <Property Name="RuleNameFriendly" Type="nvarchar" MaxLength="100" />
+          <Property Name="RuleName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreateUser" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateUser" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="InsightLink">
+          <Key>
+            <PropertyRef Name="InsightLinkId" />
+          </Key>
+          <Property Name="InsightLinkId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InsightId" Type="int" Nullable="false" />
+          <Property Name="LinkLabel" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LinkUrl" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Vv_LinkType" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreateUser" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateUser" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="VV_InsightLink">
+          <Key>
+            <PropertyRef Name="TypeName" />
+          </Key>
+          <Property Name="TypeName" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="TypeDescription" Type="varchar" MaxLength="255" />
+          <Property Name="IsEnabled" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreateUser" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateUser" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_CdsServicePrefetch_CdsServiceConfig">
+          <End Role="CdsServiceConfig" Type="Self.CdsServiceConfig" Multiplicity="1" />
+          <End Role="CdsServicePrefetch" Type="Self.CdsServicePrefetch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CdsServiceConfig">
+              <PropertyRef Name="CdsServiceConfigId" />
+            </Principal>
+            <Dependent Role="CdsServicePrefetch">
+              <PropertyRef Name="CdsServiceConfigId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsightLink_Insight">
+          <End Role="Insight" Type="Self.Insight" Multiplicity="1" />
+          <End Role="InsightLink" Type="Self.InsightLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Insight">
+              <PropertyRef Name="InsightId" />
+            </Principal>
+            <Dependent Role="InsightLink">
+              <PropertyRef Name="InsightId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsightLink_VV_InsightLink">
+          <End Role="VV_InsightLink" Type="Self.VV_InsightLink" Multiplicity="1" />
+          <End Role="InsightLink" Type="Self.InsightLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VV_InsightLink">
+              <PropertyRef Name="TypeName" />
+            </Principal>
+            <Dependent Role="InsightLink">
+              <PropertyRef Name="Vv_LinkType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EaiDBModelStoreContainer">
+          <EntitySet Name="CdsServiceConfig" EntityType="Self.CdsServiceConfig" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CdsServicePrefetch" EntityType="Self.CdsServicePrefetch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Insight" EntityType="Self.Insight" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InsightLink" EntityType="Self.InsightLink" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VV_InsightLink" EntityType="Self.VV_InsightLink" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CdsServicePrefetch_CdsServiceConfig" Association="Self.FK_CdsServicePrefetch_CdsServiceConfig">
+            <End Role="CdsServiceConfig" EntitySet="CdsServiceConfig" />
+            <End Role="CdsServicePrefetch" EntitySet="CdsServicePrefetch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsightLink_Insight" Association="Self.FK_InsightLink_Insight">
+            <End Role="Insight" EntitySet="Insight" />
+            <End Role="InsightLink" EntitySet="InsightLink" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsightLink_VV_InsightLink" Association="Self.FK_InsightLink_VV_InsightLink">
+            <End Role="VV_InsightLink" EntitySet="VV_InsightLink" />
+            <End Role="InsightLink" EntitySet="InsightLink" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EaiDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CdsServiceConfig">
+          <Key>
+            <PropertyRef Name="CdsServiceConfigId" />
+          </Key>
+          <Property Name="CdsServiceConfigId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Hook" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Id" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CdsServicePrefetch" Relationship="Self.FK_CdsServicePrefetch_CdsServiceConfig" FromRole="CdsServiceConfig" ToRole="CdsServicePrefetch" />
+        </EntityType>
+        <EntityType Name="CdsServicePrefetch">
+          <Key>
+            <PropertyRef Name="CdsServicePrefetchId" />
+          </Key>
+          <Property Name="CdsServicePrefetchId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CdsServiceConfigId" Type="Int32" Nullable="false" />
+          <Property Name="resourceName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="resourceString" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sequence" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CdsServiceConfig" Relationship="Self.FK_CdsServicePrefetch_CdsServiceConfig" FromRole="CdsServicePrefetch" ToRole="CdsServiceConfig" />
+        </EntityType>
+        <EntityType Name="Insight">
+          <Key>
+            <PropertyRef Name="InsightId" />
+          </Key>
+          <Property Name="InsightId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberMessageHeadline" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MemberMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProviderMessageheadline" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProviderMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MessageType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Sensitiveind" Type="Int32" Nullable="false" />
+          <Property Name="RuleNameFriendly" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RuleName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="InsightLink" Relationship="Self.FK_InsightLink_Insight" FromRole="Insight" ToRole="InsightLink" />
+        </EntityType>
+        <EntityType Name="InsightLink">
+          <Key>
+            <PropertyRef Name="InsightLinkId" />
+          </Key>
+          <Property Name="InsightLinkId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InsightId" Type="Int32" Nullable="false" />
+          <Property Name="LinkLabel" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LinkUrl" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Vv_LinkType" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Insight" Relationship="Self.FK_InsightLink_Insight" FromRole="InsightLink" ToRole="Insight" />
+          <NavigationProperty Name="VV_InsightLink" Relationship="Self.FK_InsightLink_VV_InsightLink" FromRole="InsightLink" ToRole="VV_InsightLink" />
+        </EntityType>
+        <EntityType Name="VV_InsightLink">
+          <Key>
+            <PropertyRef Name="TypeName" />
+          </Key>
+          <Property Name="TypeName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TypeDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="InsightLink" Relationship="Self.FK_InsightLink_VV_InsightLink" FromRole="VV_InsightLink" ToRole="InsightLink" />
+        </EntityType>
+        <Association Name="FK_CdsServicePrefetch_CdsServiceConfig">
+          <End Role="CdsServiceConfig" Type="Self.CdsServiceConfig" Multiplicity="1" />
+          <End Role="CdsServicePrefetch" Type="Self.CdsServicePrefetch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CdsServiceConfig">
+              <PropertyRef Name="CdsServiceConfigId" />
+            </Principal>
+            <Dependent Role="CdsServicePrefetch">
+              <PropertyRef Name="CdsServiceConfigId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsightLink_Insight">
+          <End Role="Insight" Type="Self.Insight" Multiplicity="1" />
+          <End Role="InsightLink" Type="Self.InsightLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Insight">
+              <PropertyRef Name="InsightId" />
+            </Principal>
+            <Dependent Role="InsightLink">
+              <PropertyRef Name="InsightId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsightLink_VV_InsightLink">
+          <End Role="VV_InsightLink" Type="Self.VV_InsightLink" Multiplicity="1" />
+          <End Role="InsightLink" Type="Self.InsightLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VV_InsightLink">
+              <PropertyRef Name="TypeName" />
+            </Principal>
+            <Dependent Role="InsightLink">
+              <PropertyRef Name="Vv_LinkType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EaiDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CdsServiceConfig" EntityType="Self.CdsServiceConfig" />
+          <EntitySet Name="CdsServicePrefetch" EntityType="Self.CdsServicePrefetch" />
+          <EntitySet Name="Insight" EntityType="Self.Insight" />
+          <EntitySet Name="InsightLink" EntityType="Self.InsightLink" />
+          <EntitySet Name="VV_InsightLink" EntityType="Self.VV_InsightLink" />
+          <AssociationSet Name="FK_CdsServicePrefetch_CdsServiceConfig" Association="Self.FK_CdsServicePrefetch_CdsServiceConfig">
+            <End Role="CdsServiceConfig" EntitySet="CdsServiceConfig" />
+            <End Role="CdsServicePrefetch" EntitySet="CdsServicePrefetch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsightLink_Insight" Association="Self.FK_InsightLink_Insight">
+            <End Role="Insight" EntitySet="Insight" />
+            <End Role="InsightLink" EntitySet="InsightLink" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsightLink_VV_InsightLink" Association="Self.FK_InsightLink_VV_InsightLink">
+            <End Role="VV_InsightLink" EntitySet="VV_InsightLink" />
+            <End Role="InsightLink" EntitySet="InsightLink" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EaiDBModelStoreContainer" CdmEntityContainer="EaiDBEntities">
+          <EntitySetMapping Name="CdsServiceConfig">
+            <EntityTypeMapping TypeName="EaiDBModel.CdsServiceConfig">
+              <MappingFragment StoreEntitySet="CdsServiceConfig">
+                <ScalarProperty Name="CdsServiceConfigId" ColumnName="CdsServiceConfigId" />
+                <ScalarProperty Name="Hook" ColumnName="Hook" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CdsServicePrefetch">
+            <EntityTypeMapping TypeName="EaiDBModel.CdsServicePrefetch">
+              <MappingFragment StoreEntitySet="CdsServicePrefetch">
+                <ScalarProperty Name="CdsServicePrefetchId" ColumnName="CdsServicePrefetchId" />
+                <ScalarProperty Name="CdsServiceConfigId" ColumnName="CdsServiceConfigId" />
+                <ScalarProperty Name="resourceName" ColumnName="resourceName" />
+                <ScalarProperty Name="resourceString" ColumnName="resourceString" />
+                <ScalarProperty Name="sequence" ColumnName="sequence" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Insight">
+            <EntityTypeMapping TypeName="EaiDBModel.Insight">
+              <MappingFragment StoreEntitySet="Insight">
+                <ScalarProperty Name="InsightId" ColumnName="InsightId" />
+                <ScalarProperty Name="MemberMessageHeadline" ColumnName="MemberMessageHeadline" />
+                <ScalarProperty Name="MemberMessage" ColumnName="MemberMessage" />
+                <ScalarProperty Name="ProviderMessageheadline" ColumnName="ProviderMessageheadline" />
+                <ScalarProperty Name="ProviderMessage" ColumnName="ProviderMessage" />
+                <ScalarProperty Name="MessageType" ColumnName="MessageType" />
+                <ScalarProperty Name="Sensitiveind" ColumnName="Sensitiveind" />
+                <ScalarProperty Name="RuleNameFriendly" ColumnName="RuleNameFriendly" />
+                <ScalarProperty Name="RuleName" ColumnName="RuleName" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InsightLink">
+            <EntityTypeMapping TypeName="EaiDBModel.InsightLink">
+              <MappingFragment StoreEntitySet="InsightLink">
+                <ScalarProperty Name="InsightLinkId" ColumnName="InsightLinkId" />
+                <ScalarProperty Name="InsightId" ColumnName="InsightId" />
+                <ScalarProperty Name="LinkLabel" ColumnName="LinkLabel" />
+                <ScalarProperty Name="LinkUrl" ColumnName="LinkUrl" />
+                <ScalarProperty Name="Vv_LinkType" ColumnName="Vv_LinkType" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VV_InsightLink">
+            <EntityTypeMapping TypeName="EaiDBModel.VV_InsightLink">
+              <MappingFragment StoreEntitySet="VV_InsightLink">
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="TypeDescription" ColumnName="TypeDescription" />
+                <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
